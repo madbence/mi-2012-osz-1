@@ -1,3 +1,4 @@
+
 /**
  *
  * @author lennon
@@ -14,6 +15,14 @@ class Edge {
 		value = v;
 		e1.addEdge(this);
 		e2.addEdge(this);
+	}
+
+	public Node getEnd1() {
+		return end1;
+	}
+
+	public Node getEnd2() {
+		return end2;
 	}
 
 	public int getValue() {
