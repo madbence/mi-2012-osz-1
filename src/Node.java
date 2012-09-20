@@ -1,4 +1,4 @@
-import com.sun.xml.internal.bind.v2.model.core.*;
+
 import java.util.ArrayList;
 
 /**
@@ -10,10 +10,14 @@ public class Node {
 	private ArrayList<Edge> edges;
 	private int id;
 	private String name;
+	private int x;
+	private int y;
 
-	public Node(int i, String s) {
+	public Node(int i, String s, int a, int b) {
 		id = i;
 		name = s;
+		x = a;
+		y = b;
 		edges = new ArrayList<Edge>();
 	}
 
@@ -27,5 +31,13 @@ public class Node {
 
 	public String getName() {
 		return name;
+	}
+
+	public int getX() {
+		return x;
+	}
+
+	public int getY() {
+		return y;
 	}
 }
