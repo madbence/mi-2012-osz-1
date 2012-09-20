@@ -15,6 +15,14 @@ public class Graph {
 		edges = new ArrayList<Edge>();
 	}
 
+	public void addNode(Node node) {
+		nodes.add(node);
+	}
+	
+	public void addEdge(Edge e){
+		edges.add(e);
+	}
+
 	public Node getNode(int id) throws Exception {
 		for(Node n : nodes) {
 			if(n.getId() == id) {
