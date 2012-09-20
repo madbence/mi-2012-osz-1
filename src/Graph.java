@@ -15,11 +15,19 @@ public class Graph {
 		edges = new ArrayList<Edge>();
 	}
 
+	public ArrayList<Node> getNodes() {
+		return nodes;
+	}
+
+	public ArrayList<Edge> getEdges() {
+		return edges;
+	}
+
 	public void addNode(Node node) {
 		nodes.add(node);
 	}
-	
-	public void addEdge(Edge e){
+
+	public void addEdge(Edge e) {
 		edges.add(e);
 	}
 
