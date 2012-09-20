@@ -23,4 +23,12 @@ public class Graph {
 		}
 		throw new Exception("Node #" + id + " not found.");
 	}
+
+	public int getNodeCount() {
+		return nodes.size();
+	}
+
+	public int getEdgeCount() {
+		return edges.size();
+	}
 }
