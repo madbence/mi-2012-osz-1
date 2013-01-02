@@ -13,10 +13,12 @@ public class DebugFrame extends Frame {
 	private Graph graph;
 	private double scale = 1.0;
 	private double nodeSize = 30;
-	private double nodeMargin = 20;
-	private int borderSize = 35;
+	private double nodeMargin = 10;
+	private double[] offsets=new double[2];
+	private int borderSize = 10;
 	private Node startNode;
 	private ArrayList<Node> endNodes;
+	private Algorithm algorithm;
 
 	public DebugFrame() {
 		super();
@@ -32,7 +34,14 @@ public class DebugFrame extends Frame {
 		graph = g;
 		double width = (g.getMaxX() - g.getMinX()) * (nodeSize + nodeMargin) + 3 * borderSize;
 		double height = (g.getMaxY() - g.getMinY()) * (nodeSize + nodeMargin) + 4 * borderSize;
+		scale = Math.max(width / 1024, height/500);
+		offsets[0]=g.getMinX()* (nodeSize + nodeMargin)/scale;
+		offsets[1]=g.getMinY()* (nodeSize + nodeMargin)/scale;
 		setSize((int) width, (int) height);
+	}
+
+	public void setAlgorithm(Algorithm a) {
+		algorithm = a;
 	}
 
 	public void setStartNode(Node n) {
@@ -69,22 +78,49 @@ public class DebugFrame extends Frame {
 		}
 		g.setColor(Color.green);
 		double[] start = getNodeCoordinates(startNode);
-		Shape s = new Ellipse2D.Double(start[0] - 3, start[1] - 3, 36, 36);
+		Shape s = new Ellipse2D.Double(start[0] - 2, start[1] - 2, 34, 34);
 		g.draw(s);
 		g.setColor(Color.blue);
 		for(Node n : endNodes) {
 			double[] pos = getNodeCoordinates(n);
+			Shape e = new Ellipse2D.Double(pos[0] - 2, pos[1] - 2, 34, 34);
+			g.draw(e);
+		}
+		if(algorithm.getCurrent() != null) {
+			g.setColor(Color.red);
+			double[] pos = getNodeCoordinates(algorithm.getCurrent());
 			Shape e = new Ellipse2D.Double(pos[0] - 3, pos[1] - 3, 36, 36);
 			g.draw(e);
 		}
+		for(Node n : algorithm.getClosedSet()) {
+			g.setColor(Color.magenta);
+			double[] pos = getNodeCoordinates(n);
+			Shape e = new Ellipse2D.Double(pos[0] - 4, pos[1] - 4, 38, 38);
+			g.draw(e);
+		}
+		for(Node n : algorithm.getOpenSet()) {
+			g.setColor(Color.orange);
+			double[] pos = getNodeCoordinates(n);
+			Shape e = new Ellipse2D.Double(pos[0] - 5, pos[1] - 5, 40, 40);
+			g.draw(e);
+		}
+		if(algorithm.isFinished()) {
+			g.setColor(Color.cyan);
+			for(Node n : algorithm.getResult()) {
+				double[] pos = getNodeCoordinates(n);
+				Shape e = new Ellipse2D.Double(pos[0] - 6, pos[1] - 6, 42, 42);
+				g.draw(e);
+			}
+		}
+
 
 
 	}
 
 	public double[] getNodeCoordinates(Node n) {
 		double[] a = {
-			n.getX() * (nodeSize + nodeMargin) + borderSize,
-			n.getY() * (nodeSize + nodeMargin) + borderSize + 30
+			n.getX() * (nodeSize + nodeMargin) / scale + borderSize - offsets[0],
+			n.getY() * (nodeSize + nodeMargin) / scale + borderSize + 30 - offsets[1]
 		};
 		return a;
 	}

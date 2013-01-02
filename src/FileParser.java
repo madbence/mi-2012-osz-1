@@ -12,6 +12,8 @@ public class FileParser {
 	private Graph graph;
 	private Node startNode;
 	private ArrayList<Node> endNodes;
+	private Heuristics heuristics;
+	private Algorithm algorithm;
 
 	private enum Status {
 
@@ -28,11 +30,15 @@ public class FileParser {
 		BufferedReader br = new BufferedReader(new FileReader(file));
 		String line;
 		Status status = Status.NODE;
+		boolean skip = false;
 		while((line = br.readLine()) != null) {
 			if(line.length() == 0) {
-				status = Status.values()[status.ordinal() + 1];
+				skip = true;
 			} else if(!line.startsWith("#")) {
-
+				if(skip) {
+					status = Status.values()[status.ordinal() + 1];
+					skip = false;
+				}
 				switch (status) {
 					case NODE:
 						String[] nodeProps = line.split("\t");
@@ -58,10 +64,40 @@ public class FileParser {
 						endNodes.add(graph.getNode(Integer.parseInt(line)));
 						break;
 					case HEURISTICS:
-						//
+						switch (Integer.parseInt(line)) {
+							case 1:
+								heuristics = new ZeroHeuristics(graph);
+								break;
+							case 2:
+								heuristics = new ManhattanHeuristics(graph);
+								break;
+							case 3:
+								heuristics = new DistanceHeuristics(graph);
+								break;
+							default:
+								throw new Exception("Unknown heuristics");
+						}
 						break;
 					case ALGORITHM:
-						//
+						switch (Integer.parseInt(line)) {
+							case 1:
+								algorithm = new BreadthFirstSearchAlgorithm(startNode, endNodes, heuristics);
+								break;
+							case 2:
+								algorithm = new DepthFirstSearchAlgorithm(startNode, endNodes, heuristics);
+								break;
+							case 3:
+								algorithm = new UniformCostSearchAlgorithm(startNode, endNodes, heuristics);
+								break;
+							case 4:
+								algorithm = new GreedyAlgorithm(startNode, endNodes, heuristics);
+								break;
+							case 5:
+								algorithm = new AStarAlgorithm(startNode, endNodes, heuristics);
+								break;
+							default:
+								throw new Exception("Unknown algorithm");
+						}
 						break;
 					default:
 						throw new Exception("Unknown FileParser.Status");
@@ -72,6 +108,14 @@ public class FileParser {
 
 	public Graph getGraph() {
 		return graph;
+	}
+
+	public Heuristics getHeuristics() {
+		return heuristics;
+	}
+
+	public Algorithm getAlgorithm() {
+		return algorithm;
 	}
 
 	public Node getStartNode() {

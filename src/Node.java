@@ -1,5 +1,5 @@
 
-import java.util.ArrayList;
+import java.util.*;
 
 /**
  *
@@ -7,11 +7,12 @@ import java.util.ArrayList;
  */
 public class Node {
 
-	private ArrayList<Edge> edges;
+	private List<Edge> edges;
 	private int id;
 	private String name;
 	private int x;
 	private int y;
+	private EdgeComparator edgeComparator;
 
 	public Node(int i, String s, int a, int b) {
 		id = i;
@@ -19,10 +20,16 @@ public class Node {
 		x = a;
 		y = b;
 		edges = new ArrayList<Edge>();
+		edgeComparator=new EdgeComparator(this);
+	}
+
+	public List<Edge> getEdges() {
+		return edges;
 	}
 
 	public void addEdge(Edge e) {
 		edges.add(e);
+		Collections.sort(edges, edgeComparator);
 	}
 
 	public int getId() {

@@ -1,3 +1,6 @@
+
+import java.util.*;
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -15,7 +18,10 @@ public class ZeroHeuristics implements Heuristics {
 		graph = g;
 	}
 
-	public double getValue(Node from, Node to) {
+	public double getValue(Node from, List<Node> to) {
 		return 0;
+	}
+	public Graph getGraph() {
+		return graph;
 	}
 }
